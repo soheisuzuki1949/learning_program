@@ -1,7 +1,10 @@
 {
   "name": "streamlit-lab",
-  "image": "mcr.microsoft.com/devcontainers/python:3.11",
-  "postCreateCommand": "pip install -r .devcontainer/requirements.txt",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "features": {
+    "ghcr.io/va-h/devcontainers-features/uv:latest": {}
+  },
+  "postCreateCommand": "uv pip install --system -r requirements.txt",
   "forwardPorts": [8501],
   "customizations": {
     "vscode": {
