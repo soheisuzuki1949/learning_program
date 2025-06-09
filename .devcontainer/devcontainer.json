@@ -1,20 +1,8 @@
 {
   "name": "streamlit-lab",
-  "image": "mcr.microsoft.com/devcontainers/python:3.12",
-
-  "features": {
-    "ghcr.io/jsburckhardt/devcontainer-features/uv:1": {}
-  },
-
-  "postCreateCommand": "uv pip install --user -r .devcontainer/requirements.txt",
-
-  // ★ ここで全シェルに ~/.local/bin を通す
-  "containerEnv": {
-    "PATH": "/home/codespace/.local/bin:${containerEnv:PATH}"
-  },
-
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "postCreateCommand": "pip install -r .devcontainer/requirements.txt",
   "forwardPorts": [8501],
-
   "customizations": {
     "vscode": {
       "extensions": ["ms-python.python", "ms-python.vscode-pylance"]
