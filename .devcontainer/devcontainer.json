@@ -2,18 +2,20 @@
   "name": "streamlit-lab",
   "image": "mcr.microsoft.com/devcontainers/python:3.12",
 
-  // ❶ Feature は使わず、公式インストールスクリプトを実行
   "postCreateCommand": [
-    // uv をユーザー領域にインストール（~/.local/bin/uv）
-    "curl -Ls https://astral.sh/uv/install.sh | bash",
+    // ① uv をインストール（~/.cargo/bin/uv）
+    "curl -Ls https://astral.sh/uv/install.sh | sh",
 
-    // ❷ 依存を uv で入れる（--user で権限エラー回避）
-    "uv pip install --user -r .devcontainer/requirements.txt"
+    // ② PATH を読み込み直す（uv を使う前に必須）
+    "export PATH=\"$HOME/.cargo/bin:$PATH\" && uv pip install --user -r .devcontainer/requirements.txt",
+
+    // ③ 今後のターミナルですぐ使えるように追記
+    "echo 'export PATH=\"$HOME/.cargo/bin:$HOME/.local/bin:$PATH\"' >> ~/.bashrc"
   ],
 
-  // ❸ すべてのシェルに ~/.local/bin を確実に通す
+  // すべてのシェルに ~/.cargo/bin ~/.local/bin を通す
   "remoteEnv": {
-    "PATH": "/home/codespace/.local/bin:/usr/local/bin:/usr/bin:/bin"
+    "PATH": "/home/codespace/.cargo/bin:/home/codespace/.local/bin:/usr/local/bin:/usr/bin:/bin"
   },
 
   "forwardPorts": [8501],
