@@ -3,19 +3,12 @@
   "image": "mcr.microsoft.com/devcontainers/python:3.12",
 
   "postCreateCommand": [
-    // ① uv をインストール（~/.cargo/bin/uv）
-    "curl -Ls https://astral.sh/uv/install.sh | sh",
-
-    // ② PATH を読み込み直す（uv を使う前に必須）
-    "export PATH=\"$HOME/.cargo/bin:$PATH\" && uv pip install --user -r .devcontainer/requirements.txt",
-
-    // ③ 今後のターミナルですぐ使えるように追記
-    "echo 'export PATH=\"$HOME/.cargo/bin:$HOME/.local/bin:$PATH\"' >> ~/.bashrc"
+    "python -m pip install --upgrade pip --no-cache-dir",
+    "python -m pip install --user --no-cache-dir uv streamlit pandas"
   ],
 
-  // すべてのシェルに ~/.cargo/bin ~/.local/bin を通す
   "remoteEnv": {
-    "PATH": "/home/codespace/.cargo/bin:/home/codespace/.local/bin:/usr/local/bin:/usr/bin:/bin"
+    "PATH": "$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin"
   },
 
   "forwardPorts": [8501],
