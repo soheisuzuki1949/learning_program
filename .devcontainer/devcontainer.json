@@ -2,20 +2,31 @@
   "name": "streamlit-lab",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
 
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11",
+      "installTools": true,
+      "uv": "latest"
+    }
+  },
+
   "postCreateCommand": [
-    "python -m pip install --upgrade pip --no-cache-dir",
-    "python -m pip install --user --no-cache-dir uv streamlit pandas"
+    "uv venv",
+    ".venv/bin/uv pip install -r requirements.txt"
   ],
 
   "remoteEnv": {
-    "PATH": "${containerEnv:HOME}/.local/bin:${containerEnv:PATH}"
+    "PATH": "${containerWorkspaceFolder}/.venv/bin:${containerEnv:PATH}"
   },
 
   "forwardPorts": [8501],
 
   "customizations": {
     "vscode": {
-      "extensions": ["ms-python.python", "ms-python.vscode-pylance"]
+      "extensions": ["ms-python.python", "ms-python.vscode-pylance"],
+      "settings": {
+        "python.pythonPath": "${containerWorkspaceFolder}/.venv/bin/python"
+      }
     }
   }
 }
