@@ -5,17 +5,19 @@
   "features": {
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.11",
-      "installTools": true,
-      "uv": "latest"
+      "installTools": true
     }
   },
 
   "postCreateCommand": [
-    "bash -c \"pwd && which uv && uv venv && .venv/bin/uv pip install -r requirements.txt\""
+    "python3 -m pip install --upgrade pip",
+    "python3 -m pip install uv",
+    "export PATH=\"$HOME/.local/bin:$PATH\"",
+    "bash -c \"pwd && which uv && uv venv && ./.venv/bin/uv pip install -r requirements.txt\""
   ],
 
   "remoteEnv": {
-    "PATH": "${containerWorkspaceFolder}/.venv/bin:${containerEnv:PATH}"
+    "PATH": "${containerWorkspaceFolder}/.venv/bin:$HOME/.local/bin:${containerEnv:PATH}"
   },
 
   "forwardPorts": [8501],
