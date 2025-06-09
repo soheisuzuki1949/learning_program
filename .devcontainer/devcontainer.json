@@ -1,6 +1,6 @@
 {
   "name": "streamlit-lab",
-  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
 
   "postCreateCommand": [
     "python -m pip install --upgrade pip --no-cache-dir",
