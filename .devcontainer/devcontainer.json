@@ -17,7 +17,12 @@
     "source ~/.bashrc",
     "which uv || (echo 'Error: uv command not found after installation and PATH setup.' && exit 1)",
     "uv venv",
-    "./.venv/bin/uv pip install -r requirements.txt"
+    "echo \"Installing dependencies into virtual environment from .devcontainer/requirements.txt...\"",
+    "./.venv/bin/uv pip install -r ./.devcontainer/requirements.txt",
+    "echo \"Dependency installation complete. Listing .venv/bin contents:\"",
+    "ls -F .venv/bin",
+    "echo \"Attempting to find streamlit:\"",
+    "./.venv/bin/streamlit --version || echo 'Streamlit not found in venv after install. Check .devcontainer/requirements.txt and installation logs.'"
   ],
 
   "remoteEnv": {
