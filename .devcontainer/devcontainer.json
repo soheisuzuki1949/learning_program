@@ -2,26 +2,18 @@
   "name": "streamlit-lab",
   "image": "mcr.microsoft.com/devcontainers/python:3.12",
 
-  // ❶ uv を公式コミュニティ Feature で追加（軽量・1行で済む）
-  "features": {
-    "ghcr.io/jsburckhardt/devcontainer-features/uv:1": {}
-  },
-
-  // ❷ venv を作り、そこで uv install
+  // ❶ Feature は使わず、公式インストールスクリプトを実行
   "postCreateCommand": [
-    // venv 作成（.venv はリポジトリ直下に置く）
-    "uv venv .venv",
+    // uv をユーザー領域にインストール（~/.local/bin/uv）
+    "curl -Ls https://astral.sh/uv/install.sh | bash",
 
-    // venv をアクティベートして依存をインストール
-    ". .venv/bin/activate && uv pip install -r .devcontainer/requirements.txt",
-
-    // ❸ 以後ログイン時に自動アクティベート（便利オプション）
-    "echo 'source $(pwd)/.venv/bin/activate' >> ~/.bashrc"
+    // ❷ 依存を uv で入れる（--user で権限エラー回避）
+    "uv pip install --user -r .devcontainer/requirements.txt"
   ],
 
-  // ❹ すべてのシェルに .venv/bin を確実に通す
+  // ❸ すべてのシェルに ~/.local/bin を確実に通す
   "remoteEnv": {
-    "PATH": "${workspaceFolder}/.venv/bin:/usr/local/bin:/usr/bin:/bin"
+    "PATH": "/home/codespace/.local/bin:/usr/local/bin:/usr/bin:/bin"
   },
 
   "forwardPorts": [8501],
