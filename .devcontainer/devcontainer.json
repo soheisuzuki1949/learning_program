@@ -2,7 +2,7 @@
   "name": "streamlit-lab",
   "image": "mcr.microsoft.com/devcontainers/python:3.12",
   "features": {
-    "ghcr.io/va-h/devcontainers-features/uv:latest": {}
+    "ghcr.io/devcontainers/features/uv:1": {}
   },
   "postCreateCommand": "uv pip install --system -r .devcontainer/requirements.txt",
   "forwardPorts": [8501],
