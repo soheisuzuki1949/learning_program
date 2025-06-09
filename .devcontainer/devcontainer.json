@@ -4,7 +4,10 @@
   "features": {
     "ghcr.io/jsburckhardt/devcontainer-features/uv:1": {}
   },
-  "postCreateCommand": "uv pip install -r .devcontainer/requirements.txt",
+  "postCreateCommand": [
+    "uv pip install -r .devcontainer/requirements.txt",
+    "echo 'export PATH=\"$HOME/.local/bin:$PATH\"' >> ~/.bashrc"
+  ],
   "forwardPorts": [8501],
   "customizations": {
     "vscode": {
