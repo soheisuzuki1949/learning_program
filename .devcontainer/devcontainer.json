@@ -8,7 +8,7 @@
   ],
 
   "remoteEnv": {
-    "PATH": "$HOME/.local/bin:/usr/local/bin:/usr/bin:/bin"
+    "PATH": "${containerEnv:HOME}/.local/bin:${containerEnv:PATH}"
   },
 
   "forwardPorts": [8501],
