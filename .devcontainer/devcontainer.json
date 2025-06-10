@@ -1,11 +1,20 @@
 {
   "name": "streamlit-lab",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
-  "postCreateCommand": "curl -LsSf https://astral.sh/uv/install.sh | sh && source /home/vscode/.cargo/env && uv pip install --system -r .devcontainer/requirements.txt",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": "false",
+      "installOhMyZsh": "false",
+      "configureZshAsDefaultShell": "false",
+      "installAptPackages": "true"
+    }
+  },
+  "postCreateCommand": "bash -c \"curl -LsSf https://astral.sh/uv/install.sh | sh && export PATH=$PATH:/home/vscode/.cargo/bin && uv pip install -r .devcontainer/requirements.txt\"",
   "forwardPorts": [8501],
   "customizations": {
     "vscode": {
       "extensions": ["ms-python.python", "ms-python.vscode-pylance"]
     }
-  }
+  },
+  "remoteUser": "vscode"
 }
