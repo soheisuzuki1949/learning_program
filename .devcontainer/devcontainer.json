@@ -6,45 +6,31 @@
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.11",
       "installTools": true,
-      "uv": "latest"
+      "uv": "latest" // この設定がuvをインストールし、venvも作成することを期待する
     }
   },
 
   "postCreateCommand": [
-    "echo \"--- Running postCreateCommand for Streamlit Lab Setup ---\"",
-    "echo \"1. Upgrading pip...\"",
-    "pip install --no-cache-dir --upgrade pip 2>&1 | tee /tmp/pip_upgrade_log.txt",
-
-    "echo \"2. Installing uv globally...\"",
-    "python3 -m pip install --no-cache-dir uv 2>&1 | tee /tmp/uv_install_log.txt",
-
-    "echo \"3. Adding ~/.local/bin to PATH in ~/.bashrc (if not already there)...\"",
-    "grep -qxF 'export PATH=\"$HOME/.local/bin:$PATH\"' \"$HOME/.bashrc\" || echo 'export PATH=\"$HOME/.local/bin:$PATH\"' >> \"$HOME/.bashrc\" 2>&1 | tee /tmp/bashrc_path_log.txt",
-
-    "echo \"4. Sourcing ~/.bashrc to update PATH for this session...\"",
-    "source \"$HOME/.bashrc\" 2>&1 | tee /tmp/source_bashrc_log.txt",
-
-    "echo \"5. Verifying uv installation (should show path now)...\"",
-    "which uv || (echo \"Error: uv command not found even after installation and PATH setup. Aborting postCreateCommand.\" && exit 1) 2>&1 | tee /tmp/which_uv_log.txt",
-
-    "echo \"6. Creating virtual environment using uv...\"",
-    "UV_PATH=$(which uv)",
-    "if [ -z \"$UV_PATH\" ]; then echo \"Error: uv path not found for venv creation. Aborting.\"; exit 1; fi",
-    "\"$UV_PATH\" venv 2>&1 | tee /tmp/venv_create_log.txt || (echo \"Error: uv venv failed. Check /tmp/venv_create_log.txt. Aborting.\" && exit 1)",
-
-    "echo \"7. Installing dependencies into virtual environment from .devcontainer/requirements.txt...\"",
-    "./.venv/bin/uv pip install -r ./.devcontainer/requirements.txt 2>&1 | tee /tmp/uv_pip_install_log.txt || (echo \"Error: uv pip install failed. Check /tmp/uv_pip_install_log.txt. Aborting.\" && exit 1)",
-
-    "echo \"8. Listing .venv/bin contents after installation:\"",
-    "ls -lF ./.venv/bin 2>&1 | tee /tmp/ls_venv_bin_log.txt || (echo \"Error: ./.venv/bin directory not found after venv creation and install. Aborting.\" && exit 1)",
-
-    "echo \"9. Attempting to find streamlit directly in venv for final check in postCreateCommand:\"",
-    "./.venv/bin/streamlit --version 2>&1 | tee /tmp/streamlit_check_log.txt || echo \"Streamlit not found in venv after install. This is unexpected. Check /tmp/streamlit_check_log.txt.\"",
-
-    "echo \"--- postCreateCommand Finished ---\""
+    // Python Featureが自動的にvenvを作成し、uvを使って依存関係をインストールすることを期待する
+    // もしそれでもうまくいかない場合は、featuresの自動機能に問題がある
+    // 最低限の確認メッセージのみ残す
+    "echo \"Codespace setup complete. Attempting to activate and install requirements.\"",
+    // Python Featureが自動的にvenvを作成した場合、そのアクティベーションスクリプトがどこかにあるはず
+    // ここでは、デフォルトのvenv名(.venv)を仮定し、requirements.txtをインストール
+    // featureが自動的にvenvをアクティベートしない場合があるので、明示的にuvを使ってインストールを試みる
+    "if [ -f \"./.venv/bin/uv\" ]; then",
+    "  echo \"Found uv in .venv/bin. Installing requirements.\"",
+    "  ./.venv/bin/uv pip install -r ./.devcontainer/requirements.txt",
+    "else",
+    "  echo \"uv not found in ./.venv/bin. Attempting to use global uv if installed by feature.\"",
+    "  which uv && uv pip install -r ./.devcontainer/requirements.txt || echo \"Error: uv not found or failed to install requirements.\"",
+    "fi",
+    "echo \"Setup scripts completed.\"",
+    "ls -lF ./.venv/bin" // 最終的な確認
   ],
 
   "remoteEnv": {
+    // PATH設定はそのまま維持。これが最終的なシェル環境に影響する。
     "PATH": "${containerWorkspaceFolder}/.venv/bin:$HOME/.local/bin:${containerEnv:PATH}"
   },
 
