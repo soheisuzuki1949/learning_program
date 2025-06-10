@@ -6,14 +6,12 @@
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.11",
       "installTools": true,
-      "uv": "latest"
+      "uv": "latest" // uvのインストールはFeaturesに任せる
     }
   },
 
-  "onCreateCommand": [
-    "/bin/bash -c \"chmod +x .devcontainer/setup.sh\"", // setup.shに実行権限を付与 (bash経由)
-    "/bin/bash -c \".devcontainer/setup.sh\"" // setup.shを実行 (bash経由)
-  ],
+  // onCreateCommand から外部スクリプトを実行。単一の文字列として。
+  "onCreateCommand": "chmod +x .devcontainer/setup.sh && .devcontainer/setup.sh",
 
   "remoteEnv": {
     "PATH": "${containerWorkspaceFolder}/.venv/bin:$HOME/.local/bin:${containerEnv:PATH}"
