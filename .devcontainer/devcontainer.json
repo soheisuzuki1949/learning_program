@@ -1,7 +1,7 @@
 {
   "name": "streamlit-lab",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
-  "postCreateCommand": "pip install uv && uv pip install -r .devcontainer/requirements.txt",
+  "postCreateCommand": "pip install uv && uv pip install --system -r .devcontainer/requirements.txt",
   "forwardPorts": [8501],
   "customizations": {
     "vscode": {
