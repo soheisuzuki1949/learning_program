@@ -11,18 +11,8 @@
   },
 
   "postCreateCommand": [
-    "pip install --no-cache-dir --upgrade pip",
-    "pip install --no-cache-dir uv",
-    "grep -qxF 'export PATH=\"$HOME/.local/bin:$PATH\"' ~/.bashrc || echo 'export PATH=\"$HOME/.local/bin:$PATH\"' >> ~/.bashrc",
-    "source ~/.bashrc",
-    "which uv || (echo 'Error: uv command not found after installation and PATH setup.' && exit 1)",
-    "uv venv",
-    "echo \"Installing dependencies into virtual environment from .devcontainer/requirements.txt...\"",
-    "./.venv/bin/uv pip install -r ./.devcontainer/requirements.txt",
-    "echo \"Dependency installation complete. Listing .venv/bin contents:\"",
-    "ls -F .venv/bin",
-    "echo \"Attempting to find streamlit:\"",
-    "./.venv/bin/streamlit --version || echo 'Streamlit not found in venv after install. Check .devcontainer/requirements.txt and installation logs.'"
+    "chmod +x .devcontainer/setup.sh", // スクリプトを実行可能にする
+    ".devcontainer/setup.sh" // セットアップスクリプトを実行する
   ],
 
   "remoteEnv": {
