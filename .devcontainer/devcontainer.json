@@ -9,7 +9,8 @@
       "installAptPackages": "true"
     }
   },
-  "postCreateCommand": "bash -c \"curl -LsSf https://astral.sh/uv/install.sh | sh && export PATH=$PATH:/home/vscode/.cargo/bin && uv pip install -r .devcontainer/requirements.txt\"",
+  // ここを修正: uv pip install --system を使用
+  "postCreateCommand": "bash -c \"curl -LsSf https://astral.sh/uv/install.sh | sh && export PATH=$PATH:/home/vscode/.cargo/bin && uv pip install --system -r .devcontainer/requirements.txt\"",
   "forwardPorts": [8501],
   "customizations": {
     "vscode": {
