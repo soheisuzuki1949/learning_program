@@ -6,31 +6,44 @@
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.11",
       "installTools": true,
-      "uv": "latest" // この設定がuvをインストールし、venvも作成することを期待する
+      "uv": "latest"
     }
   },
 
-  "postCreateCommand": [
-    // Python Featureが自動的にvenvを作成し、uvを使って依存関係をインストールすることを期待する
-    // もしそれでもうまくいかない場合は、featuresの自動機能に問題がある
-    // 最低限の確認メッセージのみ残す
-    "echo \"Codespace setup complete. Attempting to activate and install requirements.\"",
-    // Python Featureが自動的にvenvを作成した場合、そのアクティベーションスクリプトがどこかにあるはず
-    // ここでは、デフォルトのvenv名(.venv)を仮定し、requirements.txtをインストール
-    // featureが自動的にvenvをアクティベートしない場合があるので、明示的にuvを使ってインストールを試みる
-    "if [ -f \"./.venv/bin/uv\" ]; then",
-    "  echo \"Found uv in .venv/bin. Installing requirements.\"",
-    "  ./.venv/bin/uv pip install -r ./.devcontainer/requirements.txt",
-    "else",
-    "  echo \"uv not found in ./.venv/bin. Attempting to use global uv if installed by feature.\"",
-    "  which uv && uv pip install -r ./.devcontainer/requirements.txt || echo \"Error: uv not found or failed to install requirements.\"",
+  "onCreateCommand": [
+    "echo \"--- Running onCreateCommand for Streamlit Lab Setup ---\"",
+    "echo \"Current working directory: $(pwd)\"",
+    "echo \"Checking if uv is available: $(which uv)\"",
+
+    "UV_BIN=$(which uv)",
+    "if [ -z \"$UV_BIN\" ]; then",
+    "  echo \"Error: uv command not found in PATH. Attempting fallback for manual install.\"",
+    "  python3 -m pip install --no-cache-dir uv || { echo \"Error: Manual uv installation failed. Aborting.\"; exit 1; }",
+    "  UV_BIN=$(which uv)",
+    "  if [ -z \"$UV_BIN\" ]; then",
+    "    echo \"Critical Error: uv could not be found or installed. Cannot create virtual environment. Aborting Codespace creation.\"; exit 1;",
+    "  fi",
+    "  grep -qxF 'export PATH=\"$HOME/.local/bin:$PATH\"' \"$HOME/.bashrc\" || echo 'export PATH=\"$HOME/.local/bin:$PATH\"' >> \"$HOME/.bashrc\"",
+    "  source \"$HOME/.bashrc\"",
+    "  echo \"uv path after manual install and PATH update: $(which uv)\"",
     "fi",
-    "echo \"Setup scripts completed.\"",
-    "ls -lF ./.venv/bin" // 最終的な確認
+
+    "echo \"Creating virtual environment using uv at: ./.venv\"",
+    "\"$UV_BIN\" venv || { echo \"Error: uv venv failed to create virtual environment. Aborting Codespace creation.\"; exit 1; }",
+
+    "echo \"Installing dependencies from .devcontainer/requirements.txt into ./.venv\"",
+    "./.venv/bin/uv pip install -r ./.devcontainer/requirements.txt || { echo \"Error: uv pip install failed. Aborting Codespace creation.\"; exit 1; }",
+
+    "echo \"Verifying .venv/bin contents after installation:\"",
+    "ls -lF ./.venv/bin || echo \"Warning: ./.venv/bin not found after install.\"",
+
+    "echo \"Attempting to verify streamlit installation:\"",
+    "./.venv/bin/streamlit --version || echo \"Error: Streamlit not found in ./.venv/bin after installation. This is critical.\"",
+
+    "echo \"--- onCreateCommand finished ---\""
   ],
 
   "remoteEnv": {
-    // PATH設定はそのまま維持。これが最終的なシェル環境に影響する。
     "PATH": "${containerWorkspaceFolder}/.venv/bin:$HOME/.local/bin:${containerEnv:PATH}"
   },
 
