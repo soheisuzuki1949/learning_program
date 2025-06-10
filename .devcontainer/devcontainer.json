@@ -10,10 +10,9 @@
     }
   },
 
-  // onCreateCommand から外部スクリプトを呼び出す
   "onCreateCommand": [
-    "chmod +x .devcontainer/setup.sh", // スクリプトを実行可能にする
-    ".devcontainer/setup.sh" // スクリプトを実行
+    "chmod +x .devcontainer/setup.sh", // setup.shに実行権限を付与
+    ".devcontainer/setup.sh" // setup.shを実行
   ],
 
   "remoteEnv": {
