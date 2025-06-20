@@ -43,7 +43,7 @@ channels = st.multiselect(
 # フィルタリング
 # ─────────────────────────────
 start_dt = pd.to_datetime(date_range[0])
-end_dt = pd.to_datetime(date_range[1])
+end_dt   = pd.to_datetime(date_range[1])
 
 df_filt = df[
     (df["date"].between(start_dt, end_dt))
@@ -54,7 +54,7 @@ df_filt = df[
 
 # 以下、KPI・チャート部分はそのまま ─────────
 total_revenue = int(df_filt["revenue"].sum())
-total_units = int(df_filt["units"].sum())
+total_units   = int(df_filt["units"].sum())
 avg_unit_price = int(df_filt["unit_price"].mean()) if not df_filt.empty else 0
 
 col1, col2, col3 = st.columns(3)
@@ -66,24 +66,21 @@ st.divider()
 
 # 日別売上推移
 revenue_daily = (
-    df_filt.groupby("date", as_index=False)[
-        "revenue"].sum().sort_values("date")
+    df_filt.groupby("date", as_index=False)["revenue"].sum().sort_values("date")
 )
 st.subheader("🗓️ 日別売上推移")
 st.line_chart(revenue_daily, x="date", y="revenue", height=250)
 
 # カテゴリ別売上
 revenue_by_cat = (
-    df_filt.groupby("category", as_index=False)[
-        "revenue"].sum().sort_values("revenue")
+    df_filt.groupby("category", as_index=False)["revenue"].sum().sort_values("revenue")
 )
 st.subheader("🏷️ カテゴリ別売上")
 st.bar_chart(revenue_by_cat, x="category", y="revenue", height=250)
 
 # 地域別売上
 revenue_by_region = (
-    df_filt.groupby("region", as_index=False)[
-        "revenue"].sum().sort_values("revenue")
+    df_filt.groupby("region", as_index=False)["revenue"].sum().sort_values("revenue")
 )
 st.subheader("🌎 地域別売上")
 st.bar_chart(revenue_by_region, x="region", y="revenue", height=250)

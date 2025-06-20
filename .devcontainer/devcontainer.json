@@ -14,7 +14,11 @@
   "forwardPorts": [8501],
   "customizations": {
     "vscode": {
-      "extensions": ["ms-python.python", "ms-python.vscode-pylance"],
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "GitHub.copilot"
+      ],
       // VS CodeのPython拡張機能が仮想環境を自動的に選択するように設定
       "settings": {
         "python.defaultInterpreterPath": "./.venv/bin/python",
