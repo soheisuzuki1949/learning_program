@@ -7,7 +7,8 @@
       "installOhMyZsh": "false",
       "configureZshAsDefaultShell": "false",
       "installAptPackages": "true"
-    }
+    },
+    "ghcr.io/devcontainers/features/node:1": {}
   },
   // postCreateCommand は uv のインストールと venv 作成までにとどめる
   "postCreateCommand": "bash -c \"curl -LsSf https://astral.sh/uv/install.sh | sh && export PATH=$PATH:/home/vscode/.cargo/bin && uv venv && uv pip install -r .devcontainer/requirements.txt\"",
