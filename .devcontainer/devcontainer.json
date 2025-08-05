@@ -1,18 +1,6 @@
 {
-  "name": "streamlit-lab",
-  "image": "mcr.microsoft.com/devcontainers/python:3.11",
-  "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {
-      "installZsh": "false",
-      "installOhMyZsh": "false",
-      "configureZshAsDefaultShell": "false",
-      "installAptPackages": "true"
-    },
-    "ghcr.io/devcontainers/features/node:1": {}
-  },
-  // postCreateCommand は uv のインストールと venv 作成までにとどめる
-  "postCreateCommand": "bash -c \"curl -LsSf https://astral.sh/uv/install.sh | sh && export PATH=$PATH:/home/vscode/.cargo/bin && uv venv && uv pip install -r .devcontainer/requirements.txt\"",
-  "forwardPorts": [8501],
+  "name": "Python Development",
+  "image": "mcr.microsoft.com/devcontainers/python:1-3.11-bullseye",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -20,12 +8,14 @@
         "ms-python.vscode-pylance",
         "GitHub.copilot"
       ],
-      // VS CodeのPython拡張機能が仮想環境を自動的に選択するように設定
       "settings": {
         "python.defaultInterpreterPath": "./.venv/bin/python",
-        "python.terminal.activateEnvironment": true
+        "python.terminal.activateEnvironment": true,
+        "python.terminal.activateEnvInCurrentTerminal": true
       }
     }
   },
+  "onCreateCommand": "pip install uv",
+  "postCreateCommand": "uv sync && echo 'source .venv/bin/activate' >> ~/.bashrc",
   "remoteUser": "vscode"
 }
