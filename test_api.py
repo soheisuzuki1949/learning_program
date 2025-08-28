@@ -1,9 +1,3 @@
-def main():
-    print("Hello from learning-program!")
-
-
-if __name__ == "__main__":
-    main()
 import requests
 
 def get_weather_data(city_name="Tokyo"):
